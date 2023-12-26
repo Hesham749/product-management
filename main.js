@@ -9,8 +9,8 @@ let search = document.getElementById("search");
 let total = document.getElementById("total");
 let submit = document.getElementById("submit");
 let tbody = document.getElementById("tbody");
-let mood = 'create';
-let temp ;
+let mood = "create";
+let temp;
 // get total
 function getTotal() {
     if (price.value != "") {
@@ -41,10 +41,13 @@ submit.onclick = function () {
         count: count.value,
         category: category.value,
     };
-    if(newProduct.title !='' && newProduct.price != '' && newProduct.category != '' && newProduct.count < 100){
-
-
-        if(mood ==='create'){
+    if (
+        newProduct.title != "" &&
+        newProduct.price != "" &&
+        newProduct.category != "" &&
+        newProduct.count < 100
+    ) {
+        if (mood === "create") {
             if (newProduct.count > 1) {
                 for (i = 0; i < newProduct.count; i++) {
                     dataProduct.push(newProduct);
@@ -52,19 +55,17 @@ submit.onclick = function () {
             } else {
                 dataProduct.push(newProduct);
             }
-    
-        }else{
-            submit.innerHTML= 'Create';
-            dataProduct[temp]= newProduct;
-            mood = 'create'
-            count.style.display='block'
-    
+        } else {
+            submit.innerHTML = "Create";
+            dataProduct[temp] = newProduct;
+            mood = "create";
+            count.style.display = "block";
         }
         clearData();
     }
 
     localStorage.setItem("product", JSON.stringify(dataProduct));
-    
+
     showData();
 };
 // clear data
@@ -124,43 +125,44 @@ function clearAll() {
 }
 // count
 
-
 // update
-function update(i){
+function update(i) {
     title.value = dataProduct[i].title;
     price.value = dataProduct[i].price;
     taxes.value = dataProduct[i].taxes;
     ads.value = dataProduct[i].ads;
     discount.value = dataProduct[i].discount;
-    getTotal()
-    count.style.display = 'none'
+    getTotal();
+    scroll({
+        top: 0,
+        behavior: "smooth",
+    });
+    count.style.display = "none";
     category.value = dataProduct[i].category;
-    submit.innerHTML = 'update'
-    temp = i ; 
-    mood = 'update'
+    submit.innerHTML = "update";
+    temp = i;
+    mood = "update";
 }
 
 // search
-let searchMood = 'title'
-function GetSearchMood(id){
-    if(id == 'searchByTitle'){
-        searchMood = 'title'
-    }else{
-        searchMood = 'category'
-        
-
+let searchMood = "title";
+function GetSearchMood(id) {
+    if (id == "searchByTitle") {
+        searchMood = "title";
+    } else {
+        searchMood = "category";
     }
-    search.placeholder = 'search By ' + searchMood;
-    search.focus()
-    search.value = '';
-    showData()
+    search.placeholder = "search By " + searchMood;
+    search.focus();
+    search.value = "";
+    showData();
 }
 
-function searchItem(value){
-    let table ;
-    for(let i = 0 ; i< dataProduct.length ; i++){
-        if(searchMood == 'title'){
-            if(dataProduct[i].title.includes(value)){
+function searchItem(value) {
+    let table;
+    for (let i = 0; i < dataProduct.length; i++) {
+        if (searchMood == "title") {
+            if (dataProduct[i].title.includes(value)) {
                 table += `
                 <tr>
                 <td>${i + 1}</td>
@@ -175,9 +177,9 @@ function searchItem(value){
                 <td><button id="delete" onclick = 'del(${i})'>delete</button></td>
                 </tr>`;
             }
-        }
-        else{if(dataProduct[i].category.includes(value)){
-            table += `
+        } else {
+            if (dataProduct[i].category.includes(value)) {
+                table += `
             <tr>
             <td>${i + 1}</td>
             <td>${dataProduct[i].title}</td>
@@ -190,8 +192,7 @@ function searchItem(value){
             <td><button id="update" onclick = 'update(${i})'>update</button></td>
             <td><button id="delete" onclick = 'del(${i})'>delete</button></td>
             </tr>`;
-        }
-
+            }
         }
         tbody.innerHTML = table;
     }
